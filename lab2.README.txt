@@ -1,0 +1,7 @@
+Jacinda Ballantyne, 2/17/15
+Description: This program creates a hexagon filled with at least 3 colors. The hexagon can be moved:
+- up using the "W" key
+- down using the "S" key
+- left using the "A" key
+- right using the "D" key
+- back to the center using the "1" key
