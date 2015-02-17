@@ -5,8 +5,8 @@ var gl;
 var xPos = 0.0;
 var yPos = 0.0;
 
-var modelViewMatrix = mat4();
-var modelViewMatrixLoc; 
+var modelViewMatrix;
+var u_modelViewMatrix; 
 
 var verticesColors = new Float32Array([
 	// Vertex coordinates and color
@@ -18,37 +18,37 @@ var verticesColors = new Float32Array([
 	-0.25, 0.5, 0.0, 0.0, 1.0
 	]);
 
-var currentlyPressedKeys = {};
 
-function handleKeyDown(event){
-	currentlyPressedKeys[event.KeyCode]=true;
-	if (String.fromCharCode(event.KeyCode)=="A"){
-		//Move left
+function handleKeyDown(ev){
+	
+	if (ev.keyCode == 65){ // A is 65
+		
 		xPos -= 0.05;
+                console.log('move left');
 	}
-	if (String.fromCharCode(event.KeyCode)=="D"){
-		//Move right
+	if (ev.keyCode == 68){ // D is 68
+		
 		xPos += 0.05;
+				console.log('move right');
 	}
-	if (String.fromCharCode(event.KeyCode)=="W"){
-		//Move up
+	if (ev.keyCode == 87){ // W is 87
+		
 		yPos += 0.05;
+				console.log('move up');
 	}
-	if (String.fromCharCode(event.KeyCode)=="S"){
-		//Move down
+	if (ev.keyCode == 83){ // S is 83
+		
 		yPos -= 0.05;
+				console.log('move down');
 	}
-	if (String.fromCharCode(event.KeyCode)=="1"){
+	if (ev.keyCode == 49){ // 1 is 49
 		//Reset to center
 		xPos = 0;
 		yPos = 0;
+				console.log('reset');
 	}
 }
 
-function handleKeyUp(event){
-	currentlyPressedKeys[event.KeyCode]=false;
-}
-	
 window.onload = function init()
 {
 var canvas = document.getElementById( "gl-canvas" );
@@ -59,7 +59,7 @@ if ( !gl ) { alert( "WebGL isn't available" ); }
 //
 gl.viewport( 0, 0, canvas.width, canvas.height );
 gl.clearColor( 0.0, 0.0, 0.0, 1.0 );
-document.onkeyup=handleKeyUp;
+
 document.onkeydown=handleKeyDown;
 // Load shaders and initialize attribute buffers
 var program = initShaders( gl, "vertex-shader", "fragment-shader" );
@@ -81,7 +81,8 @@ var a_Color = gl.getAttribLocation(program, 'a_Color');
 gl.vertexAttribPointer(a_Color, 3, gl.FLOAT, false, FSIZE*5, FSIZE*2);
 gl.enableVertexAttribArray(a_Color);
 
-modelViewMatrixLoc = gl.getUniformLocation(program, "modelViewMatrix");
+u_modelViewMatrix = gl.getUniformLocation(program, 'u_modelViewMatrix');
+modelViewMatrix = mat4();
 
 render();
 	
@@ -92,7 +93,7 @@ var render = function(){
 	gl.clear(gl.COLOR_BUFFER_BIT);
 	
 	modelViewMatrix = translate(xPos, yPos, 0);
-	gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
+	gl.uniformMatrix4fv(u_modelViewMatrix, false, flatten(modelViewMatrix));
 	gl.drawArrays(gl.TRIANGLE_FAN, 0, 6);
 	
 	window.requestAnimFrame(render);
