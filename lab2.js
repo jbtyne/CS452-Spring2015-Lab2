@@ -1,3 +1,4 @@
+// Jacinda Ballantyne, 2/17/15
 var canvas;
 var gl;
 
